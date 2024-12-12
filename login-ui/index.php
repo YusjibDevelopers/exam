@@ -27,16 +27,40 @@
 				</div>
 
 				<form method="post" id="examineeLoginFrm" class="login100-form validate-form">
+					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
+						<span class="label-input100">Fullname</span>
+						<input class="input100" type="fullname" name="fullname" placeholder="Enter your fullname">
+						<span class="focus-input100"></span>
+					</div>
 					<div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
-						<span class="label-input100">Email</span>
-						<input class="input100" type="text" name="username" placeholder="Enter email">
+						<span class="label-input100">Matric No.</span>
+						<input class="input100" type="text" name="username" placeholder="Enter your matric number">
 						<span class="focus-input100"></span>
 					</div>
 
-					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
-						<span class="label-input100">Password</span>
-						<input class="input100" type="password" name="pass" placeholder="Enter password">
-						<span class="focus-input100"></span>
+					<div class="wrap-input100 validate-input m-b-26" data-validate="Course is required">
+						<span class="label-input100">Course</span>
+						<select class="form-control" name="course" id="course">
+						<option value="0">Select course</option>
+						<?php 
+							$host = "localhost";
+							$user = "root";
+							$pass = "";
+							$db   = "cee_db";
+							$conn = null;
+							
+							try {
+							$conn = new PDO("mysql:host={$host};dbname={$db};",$user,$pass);
+							} catch (Exception $e) {
+							
+							}
+							
+							$selCourse = $conn->query("SELECT * FROM course_tbl ORDER BY cou_id asc");
+							while ($selCourseRow = $selCourse->fetch(PDO::FETCH_ASSOC)) { ?>
+							<option value="<?php echo $selCourseRow['cou_id']; ?>"><?php echo $selCourseRow['cou_name']; ?></option>
+							<?php }
+						?>
+						</select>
 					</div>
 
 

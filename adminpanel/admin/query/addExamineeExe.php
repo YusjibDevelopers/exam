@@ -4,43 +4,52 @@
 
 extract($_POST);
 
-$selExamineeFullname = $conn->query("SELECT * FROM examinee_tbl WHERE exmne_fullname='$fullname' ");
-$selExamineeEmail = $conn->query("SELECT * FROM examinee_tbl WHERE exmne_email='$email' ");
+// Validate inputs first
+if($gender == "0") {
+    $res = array("res" => "noGender");
+}
+else if(empty($courses)) {
+    $res = array("res" => "noCourse");
+}
+else if($year_level == "0") {
+    $res = array("res" => "noLevel");
+}
+else {
+    try {
+        // Prepare the insert statement
+        $stmt = $conn->prepare("INSERT INTO examinee_tbl(exmne_fullname, exmne_course, exmne_gender, exmne_year_level, exmne_email) VALUES(:fullname, :course, :gender, :year_level, :matric)");
 
+        // Track successful insertions
+        $insertSuccess = true;
 
-if($gender == "0")
-{
-	$res = array("res" => "noGender");
-}
-else if($course == "0")
-{
-	$res = array("res" => "noCourse");
-}
-else if($year_level == "0")
-{
-	$res = array("res" => "noLevel");
-}
-else if($selExamineeFullname->rowCount() > 0)
-{
-	$res = array("res" => "fullnameExist", "msg" => $fullname);
-}
-else if($selExamineeEmail->rowCount() > 0)
-{
-	$res = array("res" => "emailExist", "msg" => $email);
-}
-else
-{
-	$insData = $conn->query("INSERT INTO examinee_tbl(exmne_fullname,exmne_course,exmne_gender,exmne_birthdate,exmne_year_level,exmne_email,exmne_password) VALUES('$fullname','$course','$gender','$bdate','$year_level','$email','$password')  ");
-	if($insData)
-	{
-		$res = array("res" => "success", "msg" => $email);
-	}
-	else
-	{
-		$res = array("res" => "failed");
-	}
-}
+        // Loop through selected courses and insert for each
+        foreach ($courses as $selectedCourse) {
+            $result = $stmt->execute([
+                ':fullname' => $fullname,
+                ':course' => $selectedCourse,
+                ':gender' => $gender,
+                ':year_level' => $year_level,
+                ':matric' => $matric
+            ]);
 
+            // If any insertion fails, set flag to false
+            if (!$result) {
+                $insertSuccess = false;
+                break;
+            }
+        }
+
+        // Set response based on insertion result
+        if ($insertSuccess) {
+            $res = array("res" => "success", "msg" => $matric);
+        } else {
+            $res = array("res" => "failed");
+        }
+    } catch(PDOException $e) {
+        // Handle any database errors
+        $res = array("res" => "failed", "error" => $e->getMessage());
+    }
+}
 
 echo json_encode($res);
  ?>

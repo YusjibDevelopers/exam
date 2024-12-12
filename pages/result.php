@@ -1,8 +1,20 @@
- <?php 
+<?php 
     $examId = $_GET['id'];
     $selExam = $conn->query("SELECT * FROM exam_tbl WHERE ex_id='$examId' ")->fetch(PDO::FETCH_ASSOC);
-
- ?>
+    
+    // Check the exam_attempt table for the result status
+    $attemptCheck = $conn->query("SELECT result FROM exam_attempt WHERE exam_id='$examId' AND exmne_id='$exmneId'")->fetch(PDO::FETCH_ASSOC);
+    
+    // Check if the result is ready
+    if ($attemptCheck['result'] == 'notReady') {
+        echo "
+        <div class='text-center w-100'>
+            <h1 class='text-danger'>
+                Result Not Ready
+            </h1>
+        </div>";
+    } else if ($attemptCheck['result'] == 'ready') {
+        ?>
 
 <div class="app-main__outer">
 <div class="app-main__inner">
@@ -89,7 +101,7 @@
             <div class="card mb-3 widget-content bg-happy-green">
                 <div class="widget-content-wrapper text-white">
                     <div class="widget-content-left">
-                        <div class="widget-heading"><h5>Percentage</h5></div>
+                        <div class="widget-heading"><h5>CGPA</h5></div>
                         <div class="widget-subheading" style="color: transparent;">/</div>
                         </div>
                         <div class="widget-content-right">
@@ -100,10 +112,8 @@
                             <span>
                                 <?php 
                                     $score = $selScore->rowCount();
-                                    $ans = $score / $over * 100;
-                                    echo number_format($ans,2);
-                                    echo "%";
-                                    
+                                    $cgpa = ($score / $over) * 4;
+                                    echo number_format($cgpa, 2);
                                  ?>
                             </span> 
                         </div>
@@ -117,3 +127,6 @@
 
     </div>
 </div>
+<?php
+    }
+?>

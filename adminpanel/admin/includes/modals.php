@@ -98,7 +98,9 @@
               <option value="30">30 Minutes</option> 
               <option value="40">40 Minutes</option> 
               <option value="50">50 Minutes</option> 
-              <option value="60">60 Minutes</option> 
+              <option value="60">60 Minutes</option>
+              <option value="90">90 Minutes</option> 
+              <option value="120">120 Minutes</option>
             </select>
           </div>
 
@@ -136,7 +138,7 @@
    <form class="refreshFrm" id="addExamineeFrm" method="post">
      <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add Examinee</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add Examinee</h5> 
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -148,8 +150,8 @@
             <input type="" name="fullname" id="fullname" class="form-control" placeholder="Input Fullname" autocomplete="off" required="">
           </div>
           <div class="form-group">
-            <label>Birhdate</label>
-            <input type="date" name="bdate" id="bdate" class="form-control" placeholder="Input Birhdate" autocomplete="off" >
+            <label>Matric No</label>
+            <input type="text" name="matric" id="matric" class="form-control" placeholder="Input Matric No/Reg No" autocomplete="off" required="">
           </div>
           <div class="form-group">
             <label>Gender</label>
@@ -161,15 +163,17 @@
           </div>
           <div class="form-group">
             <label>Course</label>
-            <select class="form-control" name="course" id="course">
-              <option value="0">Select course</option>
-              <?php 
-                $selCourse = $conn->query("SELECT * FROM course_tbl ORDER BY cou_id asc");
-                while ($selCourseRow = $selCourse->fetch(PDO::FETCH_ASSOC)) { ?>
-                  <option value="<?php echo $selCourseRow['cou_id']; ?>"><?php echo $selCourseRow['cou_name']; ?></option>
-                <?php }
-               ?>
-            </select>
+            <?php 
+              $selCourse = $conn->query("SELECT * FROM course_tbl ORDER BY cou_id asc");
+              while ($selCourseRow = $selCourse->fetch(PDO::FETCH_ASSOC)) { ?>
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="courses[]" value="<?php echo $selCourseRow['cou_id']; ?>" >
+                  <label class="form-check-label" for="course-<?php echo $selCourseRow['cou_id']; ?>">
+                    <?php echo $selCourseRow['cou_name']; ?>
+                  </label>
+                </div>
+              <?php }
+             ?>
           </div>
           <div class="form-group">
             <label>Year Level</label>
@@ -180,14 +184,6 @@
               <option value="third year">Third Year</option>
               <option value="fourth year">Fourth Year</option>
             </select>
-          </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" id="email" class="form-control" placeholder="Input Email" autocomplete="off" required="">
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" name="password" id="password" class="form-control" placeholder="Input Password" autocomplete="off" required="">
           </div>
         </div>
       </div>

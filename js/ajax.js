@@ -5,10 +5,17 @@ $(document).on("submit","#examineeLoginFrm", function(){
       {
         Swal.fire(
           'Invalid',
-          'Please input valid email / password',
+          'Please input valid name / matric no.',
           'error'
         )
-      }
+      }else if(data.res == "wrong course")
+        {
+          Swal.fire(
+            'Invalid',
+            'You dont have an exam for the course you selected',
+            'error'
+          )
+        }
       else if(data.res == "success")
       {
         $('body').fadeOut();
@@ -17,7 +24,7 @@ $(document).on("submit","#examineeLoginFrm", function(){
    },'json');
 
    return false;
-});
+}); 
 
 
 

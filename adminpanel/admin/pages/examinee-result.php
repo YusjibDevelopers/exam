@@ -20,7 +20,8 @@
                                 <th>Fullname</th>
                                 <th>Exam Name</th>
                                 <th>Scores</th>
-                                <th>Ratings</th>
+                                <th>Point</th>
+                                <th>Action</th>
                                 <!-- <th width="10%"></th> -->
                             </tr>
                             </thead>
@@ -58,18 +59,16 @@
                                                 <span>
                                                     <?php 
                                                         $score = $selScore->rowCount();
-                                                        $ans = $score / $over * 100;
-                                                        echo number_format($ans,2);
-                                                        // echo "$ans";
-                                                        echo "%";
-                                                        
+                                                        // Calculate CGPA based on the score and total questions
+                                                        $cgpa = ($score / $over) * 4; // Assuming 4 is the maximum CGPA
+                                                        echo number_format($cgpa, 2);
+                                                        // echo "$cgpa";
                                                      ?>
                                                 </span> 
                                            </td>
-                                           <!-- <td>
-                                               <a rel="facebox" href="facebox_modal/updateExaminee.php?id=<?php echo $selExmneRow['exmne_id']; ?>" class="btn btn-sm btn-primary">Print Result</a>
-
-                                           </td> -->
+                                           <td>
+                                               <a rel="facebox" href="facebox_modal/updateResult.php?id=<?php echo $selExmneRow['exmne_id']; ?>" class="btn btn-sm btn-primary">Send Result</a>
+                                           </td>
                                         </tr>
                                     <?php }
                                 }

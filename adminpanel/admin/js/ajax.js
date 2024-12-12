@@ -323,14 +323,14 @@ $(document).on("submit","#addExamineeFrm" , function(){
           'error'
        )
     }
-    else if(data.res == "emailExist")
-    {
-      Swal.fire(
-          'Email Already Exist',
-          data.msg + ' are already exist',
-          'error'
-       )
-    }
+    // else if(data.res == "emailExist")
+    // {
+    //   Swal.fire(
+    //       'Email Already Exist',
+    //       data.msg + ' are already exist',
+    //       'error'
+    //    )
+    // }
     else if(data.res == "success")
     {
       Swal.fire(
@@ -375,11 +375,27 @@ $(document).on("submit","#updateExamineeFrm" , function(){
 });
 
 
+// Update Result
+$(document).on("submit","#updateResultFrm" , function(){
+  $.post("query/updateResultExe.php", $(this).serialize() , function(data){
+     if(data.res == "success")
+     {
+        Swal.fire(
+            'Success',
+            'Result has been successfully updated!',
+            'success'
+          )
+          refreshDiv();
+     }
+  },'json')
+  return false;
+});
+
+
 function refreshDiv()
 {
   $('#tableList').load(document.URL +  ' #tableList');
   $('#refreshData').load(document.URL +  ' #refreshData');
-
 }
 
 
